@@ -4,5 +4,5 @@ langchain
 PyPDF2
 openai
 numpy
-sklearn
+scikit-learn
 langchain-community
