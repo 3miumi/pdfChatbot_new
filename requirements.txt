@@ -1,1 +1,7 @@
 st_pages
+streamlit
+langchain
+PyPDF2
+openai
+numpy
+langchain-community
