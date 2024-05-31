@@ -15,8 +15,9 @@ from sklearn.metrics.pairwise import cosine_similarity
 
 
 # Set up the OpenAI client with API key
-OPENAI_API_KEY = st.secrets["OPENAI_API_KEY"]  # Assuming you store your API key in Streamlit's secrets
-client = OpenAI(api_key=OPENAI_API_KEY)
+# OPENAI_API_KEY = st.secrets["OPENAI_API_KEY"]  # Assuming you store your API key in Streamlit's secrets
+# client = OpenAI(api_key=OPENAI_API_KEY)
+
 
 
 
@@ -35,9 +36,10 @@ client = OpenAI(api_key=OPENAI_API_KEY)
 #     selected_sentences = [sentences[idx] for idx, score in selected_indices]
 #     summarized_text = ' '.join(selected_sentences)
 #     return summarized_text
-def classify_query_gpt3(query):
+def classify_query_gpt3(query,client):
     prompt = (
-        "Given a user query about a collection of PDF documents, classify the intent of the query into the following categories:\n"
+        "Given a user query about a col"
+        "lection of PDF documents, classify the intent of the query into the following categories:\n"
         "1. Similarity Check: The user wants to understand how documents are similar or different.For example, if a user asks 'What are the common themes between these two reports?', this should be classified as a 'Similarity Check' because the user wants to know how the documents relate or differ in content.\n"
         "2. General Inquiry: The user asks general questions about the content or nature of the documents. For example, if a user asks 'What types of documents are these?' or 'what topics are those documents', it should be classified as 'General Inquiry' as it's about the nature of the documents in general.\n"
         "3. Other: Any other types of inquiries.\n"
@@ -206,6 +208,7 @@ def show():
                                                       type="password")
         if st.session_state.user_api_key:
             OPENAI_API_KEY = st.session_state.user_api_key
+            client = OpenAI(api_key=st.session_state.user_api_key)
             st.sidebar.success("API Key saved successfully!")
             # Continue with the rest of your application logic
             # Now use OPENAI_API_KEY for your API calls
@@ -280,7 +283,7 @@ def show():
 
         with st.chat_message("user"):
             st.markdown(user_input)
-        classification = classify_query_gpt3(user_input)
+        classification = classify_query_gpt3(user_input,client)
         if classification == "Similarity Check" and 'vector_store' in st.session_state:
             with st.chat_message("assistant"):
                 embeddings = get_all_embeddings(st.session_state.vector_store)
